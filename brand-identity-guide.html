@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taste + AI — A Methodology for Brand Identity</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #000000;
+    --surface: #0a0a0a;
+    --surface-2: #141414;
+    --border: #1e1e1e;
+    --text: #f0f0f0;
+    --text-2: #b0b0b0;
+    --text-3: #666666;
+    --text-ghost: #333333;
+    --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  [data-theme="light"] {
+    --bg: #f5f5f5;
+    --surface: #ffffff;
+    --surface-2: #ebebeb;
+    --border: #d8d8d8;
+    --text: #111111;
+    --text-2: #555555;
+    --text-3: #999999;
+    --text-ghost: #cccccc;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) var(--bg);
+  }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    transition: background var(--transition), color var(--transition);
+  }
+
+  ::selection {
+    background: var(--text);
+    color: var(--bg);
+  }
+
+  /* ---- LANGUAGE TOGGLE ---- */
+  [data-lang="en"] [data-pt] { display: none !important; }
+  [data-lang="pt"] [data-en] { display: none !important; }
+
+  /* ---- CONTROLS (top-right) ---- */
+  .controls {
+    position: fixed;
+    top: 24px;
+    right: 32px;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .lang-toggle {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    overflow: hidden;
+    background: var(--surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: all var(--transition);
+  }
+
+  .lang-toggle button {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 10px 14px;
+    border: none;
+    background: transparent;
+    color: var(--text-3);
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+
+  .lang-toggle button.active {
+    background: var(--text);
+    color: var(--bg);
+  }
+
+  .theme-toggle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--text-3);
+    transform: scale(1.05);
+  }
+
+  .theme-toggle svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: var(--text-2);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke var(--transition);
+  }
+
+  .theme-toggle .icon-sun { display: none; }
+  .theme-toggle .icon-moon { display: block; }
+  [data-theme="light"] .theme-toggle .icon-sun { display: block; }
+  [data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+  /* ---- HERO ---- */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 100px 64px 100px;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 40px;
+  }
+
+  .hero h1 {
+    font-size: clamp(44px, 7vw, 88px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 48px;
+  }
+
+  .hero h1 strong {
+    font-weight: 600;
+  }
+
+  .hero .lead {
+    font-size: clamp(18px, 2.2vw, 24px);
+    font-weight: 300;
+    color: var(--text-2);
+    max-width: 640px;
+    line-height: 1.6;
+    margin-bottom: 64px;
+  }
+
+  .hero .scroll-line {
+    position: absolute;
+    bottom: 48px;
+    left: 64px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--text-ghost);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .hero .scroll-line::before {
+    content: '';
+    width: 48px;
+    height: 1px;
+    background: var(--text-ghost);
+    animation: extend 2s ease-in-out infinite;
+  }
+
+  @keyframes extend {
+    0%, 100% { width: 32px; opacity: 0.3; }
+    50% { width: 56px; opacity: 0.7; }
+  }
+
+  /* ---- METAPHOR ---- */
+  .metaphor {
+    padding: 140px 64px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-top: 1px solid var(--border);
+  }
+
+  .metaphor .label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 40px;
+  }
+
+  .metaphor .big-text {
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 300;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    max-width: 900px;
+    margin-bottom: 40px;
+  }
+
+  .metaphor .big-text strong {
+    font-weight: 600;
+  }
+
+  .metaphor .aside {
+    font-size: 17px;
+    color: var(--text-3);
+    max-width: 560px;
+    line-height: 1.8;
+  }
+
+  /* ---- PROBLEM ---- */
+  .problem {
+    padding: 140px 64px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .problem .left .label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 32px;
+  }
+
+  .problem .left h2 {
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .problem .left h2 strong { font-weight: 600; }
+
+  .problem .right p {
+    font-size: 18px;
+    color: var(--text-2);
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+
+  .problem .right p strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* ---- DIAGRAM ---- */
+  .diagram-section {
+    padding: 100px 64px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-top: 1px solid var(--border);
+  }
+
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 0 auto;
+    flex-wrap: nowrap;
+  }
+
+  .flow-node {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px 28px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-2);
+    text-align: center;
+    min-width: 140px;
+    transition: all var(--transition);
+  }
+
+  .flow-node:first-child { border-radius: 8px 0 0 8px; }
+  .flow-node:last-child { border-radius: 0 8px 8px 0; }
+  .flow-node:not(:last-child) { border-right: none; }
+
+  .flow-node .small {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-ghost);
+    margin-bottom: 6px;
+  }
+
+  /* ---- DIVIDER ---- */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 0 64px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .divider span {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-ghost);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ---- STEPS ---- */
+  .step {
+    padding: 140px 64px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-top: 1px solid var(--border);
+    position: relative;
+  }
+
+  .step-header { margin-bottom: 56px; }
+
+  .step-number {
+    font-size: 120px;
+    font-weight: 700;
+    color: var(--text-ghost);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    margin-bottom: 16px;
+    opacity: 0.4;
+  }
+
+  [data-theme="light"] .step-number { opacity: 0.15; }
+
+  .step-title {
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    max-width: 700px;
+  }
+
+  .step-title strong { font-weight: 600; }
+
+  .step-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .step-body.single {
+    grid-template-columns: 1fr;
+    max-width: 700px;
+  }
+
+  .step-body p {
+    font-size: 18px;
+    color: var(--text-2);
+    margin-bottom: 24px;
+    line-height: 1.8;
+  }
+
+  .step-body p strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 36px;
+    margin: 32px 0;
+    transition: all var(--transition);
+  }
+
+  .card-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 20px;
+  }
+
+  .card p {
+    font-size: 16px;
+    color: var(--text-2);
+    line-height: 1.8;
+  }
+
+  .card ul { list-style: none; padding: 0; }
+
+  .card ul li {
+    font-size: 16px;
+    color: var(--text-2);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    line-height: 1.6;
+  }
+
+  .card ul li:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .card ul li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border: 1px solid var(--text-3);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 8px;
+  }
+
+  /* Prompt */
+  .prompt-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 36px;
+    margin: 32px 0;
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--text-2);
+    white-space: pre-wrap;
+    position: relative;
+    transition: all var(--transition);
+  }
+
+  .prompt-block .prompt-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--text-ghost);
+    position: absolute;
+    top: -24px;
+    left: 0;
+    text-transform: uppercase;
+  }
+
+  .prompt-block em {
+    color: var(--text);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  /* Columns */
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 32px 0;
+  }
+
+  .col-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    transition: all var(--transition);
+  }
+
+  .col-card h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 16px;
+  }
+
+  .col-card ul { list-style: none; padding: 0; }
+
+  .col-card ul li {
+    font-size: 15px;
+    color: var(--text-2);
+    padding: 6px 0;
+    line-height: 1.6;
+  }
+
+  .col-card ul li::before {
+    content: '+ ';
+    color: var(--text-3);
+    font-weight: 600;
+  }
+
+  .col-card.avoid ul li::before {
+    content: '— ';
+    color: var(--text-ghost);
+  }
+
+  /* Callout */
+  .callout {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 36px;
+    margin: 40px 0;
+    background: var(--surface-2);
+    transition: all var(--transition);
+  }
+
+  .callout p {
+    font-size: 16px;
+    color: var(--text-2);
+    line-height: 1.8;
+  }
+
+  .callout strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* Territory bands */
+  .territories {
+    margin: 48px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .territory {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    background: var(--surface);
+    transition: all var(--transition);
+    overflow: hidden;
+  }
+
+  .territory:first-child { border-radius: 12px 12px 0 0; }
+  .territory:last-child { border-bottom: 1px solid var(--border); border-radius: 0 0 12px 12px; }
+  .territory:hover { background: var(--surface-2); }
+
+  .territory-index {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-ghost);
+    border-right: 1px solid var(--border);
+    padding: 28px 0;
+  }
+
+  .territory-content {
+    padding: 28px 32px;
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .territory-name {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .territory-desc {
+    font-size: 15px;
+    color: var(--text-3);
+    line-height: 1.6;
+  }
+
+  /* Vertical flow */
+  .v-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 48px 0;
+  }
+
+  .v-flow-node {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    padding: 20px 28px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-2);
+    text-align: center;
+    transition: all var(--transition);
+  }
+
+  .v-flow-node:first-child { border-radius: 8px 8px 0 0; }
+  .v-flow-node:last-child { border-radius: 0 0 8px 8px; border-bottom: 1px solid var(--border); }
+
+  .v-flow-node .small {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-ghost);
+    margin-bottom: 6px;
+  }
+
+  /* Big quote */
+  .big-quote {
+    padding: 160px 64px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-top: 1px solid var(--border);
+  }
+
+  .big-quote blockquote {
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 300;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    max-width: 900px;
+  }
+
+  .big-quote blockquote strong { font-weight: 600; }
+
+  .big-quote .note {
+    margin-top: 40px;
+    font-size: 15px;
+    color: var(--text-3);
+    max-width: 500px;
+    line-height: 1.8;
+  }
+
+  /* Footer */
+  footer {
+    padding: 80px 64px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  footer p { font-size: 13px; color: var(--text-ghost); }
+
+  footer .credit {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-ghost);
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 800px) {
+    .hero, .metaphor, .step, .big-quote, .diagram-section, .divider {
+      padding-left: 28px;
+      padding-right: 28px;
+    }
+    footer {
+      padding-left: 28px;
+      padding-right: 28px;
+      flex-direction: column;
+      text-align: center;
+    }
+    .problem {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding-left: 28px;
+      padding-right: 28px;
+    }
+    .step-body {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .columns { grid-template-columns: 1fr; }
+    .step-number { font-size: 80px; }
+    .hero .scroll-line { left: 28px; }
+    .controls { right: 20px; top: 20px; }
+    .theme-toggle { width: 38px; height: 38px; }
+    .lang-toggle button { padding: 8px 10px; font-size: 10px; }
+    .flow { flex-direction: column; }
+    .flow-node {
+      border-radius: 8px !important;
+      border: 1px solid var(--border) !important;
+      width: 100%;
+    }
+    .territory-content {
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+
+  /* ---- FADE IN ---- */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="lang-toggle">
+    <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+    <button id="btn-pt" onclick="setLang('pt')">PT</button>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode">
+    <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  </button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="tag">
+    <span data-en>A Methodology</span>
+    <span data-pt>Uma Metodologia</span>
+  </div>
+  <h1>
+    <span data-en>Map a brand<br>from <strong>taste</strong>,<br>not templates.</span>
+    <span data-pt>Mapeia uma marca<br>a partir do <strong>gosto</strong>,<br>não de templates.</span>
+  </h1>
+  <p class="lead">
+    <span data-en>You don't design a brand. You discover it — like mapping unknown territory. AI is your cartographer. Your taste is the compass.</span>
+    <span data-pt>Não se desenha uma marca. Descobre-se — como mapear território desconhecido. A IA é o cartógrafo. O teu gosto é a bússola.</span>
+  </p>
+  <div class="scroll-line">Scroll</div>
+</section>
+
+<!-- METAPHOR -->
+<div class="metaphor fade-in">
+  <div class="label">
+    <span data-en>The Metaphor</span>
+    <span data-pt>A Metáfora</span>
+  </div>
+  <p class="big-text">
+    <span data-en>Think of it like <strong>cartography</strong>. You don't draw the map first. You explore the terrain, sketch rough notes, trace the rivers. The landscape was always there — you just had to <strong>walk it</strong>.</span>
+    <span data-pt>Pensa nisto como <strong>cartografia</strong>. Não se desenha o mapa primeiro. Explora-se o terreno, rabiscam-se notas, traçam-se os rios. A paisagem sempre lá esteve — só precisavas de a <strong>percorrer</strong>.</span>
+  </p>
+  <p class="aside">
+    <span data-en>This process works the same way. You wander, collect, and let the territory reveal its own geography before you ever name anything.</span>
+    <span data-pt>Este processo funciona da mesma forma. Vagueias, recolhes, e deixas o território revelar a sua própria geografia antes de lhe dares nome.</span>
+  </p>
+</div>
+
+<!-- PROBLEM -->
+<div class="problem fade-in">
+  <div class="left">
+    <div class="label">
+      <span data-en>The Problem</span>
+      <span data-pt>O Problema</span>
+    </div>
+    <h2>
+      <span data-en>Everyone is prompting for <strong>outputs</strong>. Nobody is exploring the <strong>terrain</strong>.</span>
+      <span data-pt>Toda a gente pede <strong>resultados</strong>. Ninguém explora o <strong>terreno</strong>.</span>
+    </h2>
+  </div>
+  <div class="right">
+    <p>
+      <span data-en>Typing "create a modern, minimalist brand identity" gives you the same map as everyone else. That's not a design failure. It's an <strong>exploration failure</strong>.</span>
+      <span data-pt>Escrever "cria uma identidade de marca moderna e minimalista" dá-te o mesmo mapa que a toda a gente. Não é uma falha de design. É uma <strong>falha de exploração</strong>.</span>
+    </p>
+    <p>
+      <span data-en>Generic prompts produce generic brands. <strong>Rich, personal context produces something only you could have discovered.</strong></span>
+      <span data-pt>Prompts genéricos produzem marcas genéricas. <strong>Contexto rico e pessoal produz algo que só tu poderias ter descoberto.</strong></span>
+    </p>
+  </div>
+</div>
+
+<!-- DIAGRAM -->
+<div class="diagram-section fade-in">
+  <div class="flow">
+    <div class="flow-node"><span class="small">
+      <span data-en>You</span><span data-pt>Tu</span>
+    </span><span data-en>Wander</span><span data-pt>Explorar</span></div>
+    <div class="flow-node"><span class="small">
+      <span data-en>AI</span><span data-pt>IA</span>
+    </span><span data-en>Chart</span><span data-pt>Mapear</span></div>
+    <div class="flow-node"><span class="small">
+      <span data-en>AI</span><span data-pt>IA</span>
+    </span><span data-en>Cluster</span><span data-pt>Agrupar</span></div>
+    <div class="flow-node"><span class="small">
+      <span data-en>You</span><span data-pt>Tu</span>
+    </span><span data-en>Choose</span><span data-pt>Escolher</span></div>
+    <div class="flow-node"><span class="small">
+      <span data-en>AI</span><span data-pt>IA</span>
+    </span><span data-en>Develop</span><span data-pt>Desenvolver</span></div>
+    <div class="flow-node"><span class="small">
+      <span data-en>AI + You</span><span data-pt>IA + Tu</span>
+    </span><span data-en>Generate</span><span data-pt>Gerar</span></div>
+    <div class="flow-node"><span class="small">
+      <span data-en>You</span><span data-pt>Tu</span>
+    </span><span data-en>Curate</span><span data-pt>Curar</span></div>
+  </div>
+</div>
+
+<!-- DIVIDER -->
+<div class="divider"><span>
+  <span data-en>Seven Movements</span>
+  <span data-pt>Sete Movimentos</span>
+</span></div>
+
+<!-- STEP 1 -->
+<div class="step fade-in">
+  <div class="step-header">
+    <div class="step-number">01</div>
+    <h2 class="step-title">
+      <span data-en>Wander the <strong>territory</strong></span>
+      <span data-pt>Percorre o <strong>território</strong></span>
+    </h2>
+  </div>
+  <div class="step-body">
+    <div>
+      <p>
+        <span data-en>Collect everything that gives you a gut reaction. Images, textures, typography, film stills, packaging, nature, architecture. <strong>Don't filter. Don't organize. Just wander and collect.</strong></span>
+        <span data-pt>Recolhe tudo o que te provoca uma reação visceral. Imagens, texturas, tipografia, fotogramas, packaging, natureza, arquitetura. <strong>Não filtres. Não organizes. Vagueia e recolhe.</strong></span>
+      </p>
+      <p>
+        <span data-en>You're not looking for brand assets. You're gathering evidence of your taste — fragments of a world that doesn't exist yet.</span>
+        <span data-pt>Não estás à procura de "assets de marca." Estás a reunir evidências do teu gosto — fragmentos de um mundo que ainda não existe.</span>
+      </p>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">
+          <span data-en>What to look for</span>
+          <span data-pt>O que procurar</span>
+        </div>
+        <ul>
+          <li>
+            <span data-en>Images that evoke the right feeling, even if unrelated to your industry</span>
+            <span data-pt>Imagens que evoquem a sensação certa, mesmo sem relação com a tua área</span>
+          </li>
+          <li>
+            <span data-en>Typography from the wild — menus, signage, book covers</span>
+            <span data-pt>Tipografia do mundo real — menus, letreiros, capas de livros</span>
+          </li>
+          <li>
+            <span data-en>Colors in context — a sunset, oxidized metal, a vintage print</span>
+            <span data-pt>Cores em contexto — um pôr do sol, metal oxidado, uma impressão vintage</span>
+          </li>
+          <li>
+            <span data-en>Textures and materials — stone, moss, fabric, concrete</span>
+            <span data-pt>Texturas e materiais — pedra, musgo, tecido, betão</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 2 -->
+<div class="step fade-in">
+  <div class="step-header">
+    <div class="step-number">02</div>
+    <h2 class="step-title">
+      <span data-en>Spread the <strong>field notes</strong></span>
+      <span data-pt>Espalha as <strong>notas de campo</strong></span>
+    </h2>
+  </div>
+  <div class="step-body">
+    <div>
+      <p>
+        <span data-en>Export your references into a folder and hand them to an AI that can see images. Then <strong>ramble</strong>. Talk about the project, the audience, the feeling you're chasing. Stream of consciousness is fine — AI can parse messy human thinking.</span>
+        <span data-pt>Exporta as tuas referências para uma pasta e entrega-as a uma IA que consiga ver imagens. Depois <strong>divaga</strong>. Fala do projeto, da audiência, da sensação que persegues. Fluxo de consciência é válido — a IA consegue interpretar pensamento humano desorganizado.</span>
+      </p>
+
+      <div class="columns">
+        <div class="col-card">
+          <h4>
+            <span data-en>Do This</span>
+            <span data-pt>Faz Isto</span>
+          </h4>
+          <ul>
+            <li>
+              <span data-en>Ramble freely, use voice-to-text</span>
+              <span data-pt>Divaga livremente, usa voz-para-texto</span>
+            </li>
+            <li>
+              <span data-en>Share gut feelings and instincts</span>
+              <span data-pt>Partilha instintos e sensações</span>
+            </li>
+            <li>
+              <span data-en>Mention what you're NOT going for</span>
+              <span data-pt>Menciona o que NÃO queres</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col-card avoid">
+          <h4>
+            <span data-en>Avoid This</span>
+            <span data-pt>Evita Isto</span>
+          </h4>
+          <ul>
+            <li>
+              <span data-en>Asking for a logo or final output</span>
+              <span data-pt>Pedir um logo ou resultado final</span>
+            </li>
+            <li>
+              <span data-en>Over-optimizing prompt wording</span>
+              <span data-pt>Otimizar demasiado as palavras do prompt</span>
+            </li>
+            <li>
+              <span data-en>Expecting a one-shot result</span>
+              <span data-pt>Esperar resultado à primeira</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="prompt-block">
+        <div class="prompt-label">
+          <span data-en>Example Prompt</span>
+          <span data-pt>Exemplo de Prompt</span>
+        </div>
+        <span data-en>I'm building a brand for [project]. Here's a folder of references — raw, messy, unorganized. They represent <em>vibes, textures, feelings</em> that are all over the place.
+
+I'm drawn to all of them but <em>can't yet articulate why</em>.
+
+Help me make sense of this. Review every image — note what it contributes: mood, palette, texture, typography, composition.</span>
+        <span data-pt>Estou a construir uma marca para [projeto]. Aqui está uma pasta de referências — cruas, desarrumadas, desorganizadas. Representam <em>vibes, texturas, sensações</em> que vão em todas as direções.
+
+Sinto-me atraído por todas, mas <em>ainda não consigo articular porquê</em>.
+
+Ajuda-me a dar sentido a isto. Analisa cada imagem — nota o que contribui: mood, paleta, textura, tipografia, composição.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="step fade-in">
+  <div class="step-header">
+    <div class="step-number">03</div>
+    <h2 class="step-title">
+      <span data-en>Let AI <strong>chart</strong> what you've seen</span>
+      <span data-pt>Deixa a IA <strong>cartografar</strong> o que viste</span>
+    </h2>
+  </div>
+  <div class="step-body single">
+    <div>
+      <p>
+        <span data-en>AI goes through every image and builds a visual analysis — moods, palettes, textures, typography described in rich, specific language. It turns your visual intuition into <strong>vocabulary</strong>.</span>
+        <span data-pt>A IA percorre cada imagem e constrói uma análise visual — moods, paletas, texturas, tipografia descritos em linguagem rica e específica. Transforma a tua intuição visual em <strong>vocabulário</strong>.</span>
+      </p>
+      <p>
+        <span data-en>This matters because "warm" means different things to different people. Specific language is the translation layer between your taste and any tool's output.</span>
+        <span data-pt>Isto importa porque "quente" significa coisas diferentes para pessoas diferentes. Linguagem específica é a camada de tradução entre o teu gosto e o output de qualquer ferramenta.</span>
+      </p>
+
+      <div class="callout">
+        <p>
+          <span data-en><strong>This takes time — and that's the point.</strong> Let it run. This is AI doing the tedious cataloging work you'd never have patience for.</span>
+          <span data-pt><strong>Isto demora — e é esse o ponto.</strong> Deixa correr. É a IA a fazer o trabalho tedioso de catalogação para o qual nunca terias paciência.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 4 -->
+<div class="step fade-in">
+  <div class="step-header">
+    <div class="step-number">04</div>
+    <h2 class="step-title">
+      <span data-en>Discover the <strong>continents</strong></span>
+      <span data-pt>Descobre os <strong>continentes</strong></span>
+    </h2>
+  </div>
+  <div class="step-body single">
+    <div>
+      <p>
+        <span data-en>Your collection is pulling in different directions. That's the point. Ask AI to identify <strong>2–3 distinct visual territories</strong> hiding in the same pile — like discovering separate landmasses in what you thought was one coastline.</span>
+        <span data-pt>A tua coleção puxa em direções diferentes. É esse o objetivo. Pede à IA para identificar <strong>2–3 territórios visuais distintos</strong> escondidos no mesmo monte — como descobrir massas terrestres separadas no que pensavas ser uma só costa.</span>
+      </p>
+
+      <div class="prompt-block">
+        <div class="prompt-label">
+          <span data-en>Example Prompt</span>
+          <span data-pt>Exemplo de Prompt</span>
+        </div>
+        <span data-en>Group these images into distinct visual directions. Find 2-3 different brand worlds hiding in this collection.
+
+For each: give it an <em>evocative name</em>, sort the images, explain what makes it different.
+
+Be opinionated. Show me <em>patterns I'm too close to see</em>.</span>
+        <span data-pt>Agrupa estas imagens em direções visuais distintas. Encontra 2-3 mundos de marca diferentes escondidos nesta coleção.
+
+Para cada um: dá-lhe um <em>nome evocativo</em>, organiza as imagens, explica o que o torna diferente.
+
+Sê opinativo. Mostra-me <em>padrões que estou demasiado perto para ver</em>.</span>
+      </div>
+
+      <div class="territories">
+        <div class="territory">
+          <div class="territory-index">A</div>
+          <div class="territory-content">
+            <span class="territory-name">
+              <span data-en>Territory One</span>
+              <span data-pt>Território Um</span>
+            </span>
+            <span class="territory-desc">
+              <span data-en>Each direction gets an evocative name, a set of images, and a clear articulation of what makes it unique.</span>
+              <span data-pt>Cada direção recebe um nome evocativo, um conjunto de imagens e uma articulação clara do que a torna única.</span>
+            </span>
+          </div>
+        </div>
+        <div class="territory">
+          <div class="territory-index">B</div>
+          <div class="territory-content">
+            <span class="territory-name">
+              <span data-en>Territory Two</span>
+              <span data-pt>Território Dois</span>
+            </span>
+            <span class="territory-desc">
+              <span data-en>Same references, different emphasis. The clustering reveals patterns your conscious mind hasn't named yet.</span>
+              <span data-pt>Mesmas referências, ênfase diferente. O agrupamento revela padrões que a tua mente consciente ainda não nomeou.</span>
+            </span>
+          </div>
+        </div>
+        <div class="territory">
+          <div class="territory-index">C</div>
+          <div class="territory-content">
+            <span class="territory-name">
+              <span data-en>Territory Three</span>
+              <span data-pt>Território Três</span>
+            </span>
+            <span class="territory-desc">
+              <span data-en>Often the largest cluster reveals where your instincts are gravitating — before you know it yourself.</span>
+              <span data-pt>Frequentemente, o maior grupo revela para onde os teus instintos gravitam — antes de tu próprio o saberes.</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 5 -->
+<div class="step fade-in">
+  <div class="step-header">
+    <div class="step-number">05</div>
+    <h2 class="step-title">
+      <span data-en>Choose your <strong>coastline</strong></span>
+      <span data-pt>Escolhe a tua <strong>costa</strong></span>
+    </h2>
+  </div>
+  <div class="step-body">
+    <div>
+      <p>
+        <span data-en>This is where <strong>your taste makes the call.</strong> Pick the territory that pulls you. Then ask AI to develop a full brand language brief — not a spec sheet, but an <strong>art director's creative brief</strong>. Evocative, opinionated, specific.</span>
+        <span data-pt>É aqui que <strong>o teu gosto decide.</strong> Escolhe o território que te puxa. Depois pede à IA para desenvolver um brief completo de linguagem de marca — não uma ficha técnica, mas um <strong>brief criativo de diretor de arte</strong>. Evocativo, opinativo, específico.</span>
+      </p>
+
+      <div class="prompt-block">
+        <div class="prompt-label">
+          <span data-en>Example Prompt</span>
+          <span data-pt>Exemplo de Prompt</span>
+        </div>
+        <span data-en>Go deeper on direction [X]. Build a brand language for this.
+
+Think like an <em>art director</em>:
+— The feeling: what emotions should someone experience?
+— The world: what atmosphere are we building?
+— Vocabulary: textures, materials, lighting, temperatures
+— North Stars: 2-3 anchor images for this direction.
+
+Be <em>specific and weird</em>. Don't go generic.</span>
+        <span data-pt>Aprofunda a direção [X]. Constrói uma linguagem de marca para isto.
+
+Pensa como um <em>diretor de arte</em>:
+— A sensação: que emoções alguém deve experienciar?
+— O mundo: que atmosfera estamos a construir?
+— Vocabulário: texturas, materiais, iluminação, temperaturas
+— Estrelas-guia: 2-3 imagens âncora para esta direção.
+
+Sê <em>específico e estranho</em>. Nada genérico.</span>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-label">
+          <span data-en>What a good brief sounds like</span>
+          <span data-pt>Como soa um bom brief</span>
+        </div>
+        <p>
+          <span data-en>"Not calm. Not wellness. This is the feeling of walking out of a dark theater into daylight and having your pupils adjust. The first 10 seconds when the treeline breaks."</span>
+          <span data-pt>"Não é calma. Não é wellness. É a sensação de sair de um cinema escuro para a luz do dia e sentir as pupilas a ajustar. Os primeiros 10 segundos quando a linha de árvores se abre."</span>
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-label">
+          <span data-en>Vocabulary example</span>
+          <span data-pt>Exemplo de vocabulário</span>
+        </div>
+        <ul>
+          <li>
+            <span data-en><strong>Textures:</strong> Steeped, layered, dappled, porous — even solids are alive</span>
+            <span data-pt><strong>Texturas:</strong> Impregnado, estratificado, matizado, poroso — até os sólidos estão vivos</span>
+          </li>
+          <li>
+            <span data-en><strong>Light:</strong> Golden hour, warm to neutral. Never cold, never clinical</span>
+            <span data-pt><strong>Luz:</strong> Hora dourada, quente a neutro. Nunca frio, nunca clínico</span>
+          </li>
+          <li>
+            <span data-en><strong>Avoid:</strong> Clean, minimal, sleek, optimized, curated</span>
+            <span data-pt><strong>Evitar:</strong> Clean, minimal, sleek, otimizado, curado</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 6 -->
+<div class="step fade-in">
+  <div class="step-header">
+    <div class="step-number">06</div>
+    <h2 class="step-title">
+      <span data-en>Draw the <strong>map</strong></span>
+      <span data-pt>Desenha o <strong>mapa</strong></span>
+    </h2>
+  </div>
+  <div class="step-body">
+    <div>
+      <p>
+        <span data-en>Now — and only now — generate visuals. Use the filtered images from your chosen territory as style references. Ask AI to craft short prompts: not "make me a logo," but <strong>scenes, textures, moments, atmospheres</strong>.</span>
+        <span data-pt>Agora — e só agora — gera visuais. Usa as imagens filtradas do território escolhido como referências de estilo. Pede à IA para criar prompts curtos: não "faz-me um logo", mas <strong>cenas, texturas, momentos, atmosferas</strong>.</span>
+      </p>
+
+      <div class="v-flow">
+        <div class="v-flow-node"><span class="small">
+          <span data-en>Raw</span><span data-pt>Em bruto</span>
+        </span><span data-en>50+ messy references</span><span data-pt>50+ referências desarrumadas</span></div>
+        <div class="v-flow-node"><span class="small">
+          <span data-en>Filtered</span><span data-pt>Filtrado</span>
+        </span><span data-en>20–25 from one territory</span><span data-pt>20–25 de um território</span></div>
+        <div class="v-flow-node"><span class="small">
+          <span data-en>Generated</span><span data-pt>Gerado</span>
+        </span><span data-en>New imagery from brief + references</span><span data-pt>Novas imagens do brief + referências</span></div>
+        <div class="v-flow-node"><span class="small">
+          <span data-en>Curated</span><span data-pt>Curado</span>
+        </span><span data-en>Best outputs fed back in — loop tightens</span><span data-pt>Melhores outputs devolvidos — o loop aperta</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="prompt-block">
+        <div class="prompt-label">
+          <span data-en>Example Prompt</span>
+          <span data-pt>Exemplo de Prompt</span>
+        </div>
+        <span data-en>Craft simple prompts for image generation based on this direction. Not "create a brand identity" — write prompts <em>evocative of the feeling</em>: scenes, textures, moments.
+
+Keep each under <em>15 words</em>. Organize by:
+— Atmosphere & Light
+— Texture & Material
+— Human Scale & Movement</span>
+        <span data-pt>Cria prompts simples para geração de imagens baseados nesta direção. Não "cria uma identidade de marca" — escreve prompts <em>evocativos da sensação</em>: cenas, texturas, momentos.
+
+Mantém cada um com menos de <em>15 palavras</em>. Organiza por:
+— Atmosfera & Luz
+— Textura & Material
+— Escala Humana & Movimento</span>
+      </div>
+
+      <div class="callout">
+        <p>
+          <span data-en><strong>The self-reinforcing loop:</strong> When the tool generates something you love, feed it back into the style references. The map gets sharper with each pass.</span>
+          <span data-pt><strong>O loop auto-reforçante:</strong> Quando a ferramenta gera algo que adoras, devolve-o às referências de estilo. O mapa fica mais nítido a cada passagem.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 7 -->
+<div class="step fade-in">
+  <div class="step-header">
+    <div class="step-number">07</div>
+    <h2 class="step-title">
+      <span data-en>Name the <strong>world</strong></span>
+      <span data-pt>Dá nome ao <strong>mundo</strong></span>
+    </h2>
+  </div>
+  <div class="step-body">
+    <div>
+      <p>
+        <span data-en>You're not designing a logo. You've <strong>mapped a world</strong> — a universe of feeling, texture, and language that every future decision gets tested against. The question is always: <strong>does it belong on this map?</strong></span>
+        <span data-pt>Não estás a desenhar um logo. <strong>Mapeaste um mundo</strong> — um universo de sensação, textura e linguagem contra o qual cada decisão futura será testada. A pergunta é sempre: <strong>pertence a este mapa?</strong></span>
+      </p>
+    </div>
+    <div>
+      <div class="columns">
+        <div class="col-card">
+          <h4>
+            <span data-en>What you've mapped</span>
+            <span data-pt>O que mapeaste</span>
+          </h4>
+          <ul>
+            <li>
+              <span data-en>A visual language, not a logo</span>
+              <span data-pt>Uma linguagem visual, não um logo</span>
+            </li>
+            <li>
+              <span data-en>A feeling, not a color palette</span>
+              <span data-pt>Uma sensação, não uma paleta de cores</span>
+            </li>
+            <li>
+              <span data-en>A world, not a style guide</span>
+              <span data-pt>Um mundo, não um style guide</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col-card">
+          <h4>
+            <span data-en>What comes next</span>
+            <span data-pt>O que vem a seguir</span>
+          </h4>
+          <ul>
+            <li>
+              <span data-en>Typography that carries the personality</span>
+              <span data-pt>Tipografia que carrega a personalidade</span>
+            </li>
+            <li>
+              <span data-en>Color from the world, not a trend</span>
+              <span data-pt>Cor do mundo, não de uma tendência</span>
+            </li>
+            <li>
+              <span data-en>Photography direction with soul</span>
+              <span data-pt>Direção de fotografia com alma</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BIG QUOTE -->
+<div class="big-quote fade-in">
+  <blockquote>
+    <span data-en>The exploration is <strong>yours</strong>. The curation, the gut feeling, the compass. AI draws the map between where you are and where you're going. But without your <strong>footprints</strong> in the terrain, it has nothing to chart.</span>
+    <span data-pt>A exploração é <strong>tua</strong>. A curadoria, o instinto, a bússola. A IA desenha o mapa entre onde estás e para onde vais. Mas sem as tuas <strong>pegadas</strong> no terreno, não tem nada para cartografar.</span>
+  </blockquote>
+  <p class="note">
+    <span data-en>The hard part was never the execution. It was the vision. Now you have a process for getting from vague feeling to mapped world.</span>
+    <span data-pt>A parte difícil nunca foi a execução. Foi a visão. Agora tens um processo para ir de sensação vaga a mundo mapeado.</span>
+  </p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    <span data-en>Taste + AI — A methodology for brand identity.</span>
+    <span data-pt>Gosto + IA — Uma metodologia para identidade de marca.</span>
+  </p>
+  <p class="credit">
+    <span data-en>Feb 2026</span>
+    <span data-pt>Fev 2026</span>
+  </p>
+</footer>
+
+<!-- SCRIPTS -->
+<script>
+  // Theme
+  function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    localStorage.setItem('theme', current === 'dark' ? 'light' : 'dark');
+  }
+
+  // Language
+  function setLang(lang) {
+    document.documentElement.setAttribute('data-lang', lang);
+    document.documentElement.setAttribute('lang', lang);
+    localStorage.setItem('lang', lang);
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
+  }
+
+  // Restore preferences
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+  const savedLang = localStorage.getItem('lang');
+  if (savedLang) setLang(savedLang);
+
+  // Fade in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
