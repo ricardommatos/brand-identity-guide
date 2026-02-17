@@ -461,13 +461,16 @@
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 32px 36px;
-    margin: 32px 0;
+    margin: 40px 0 32px;
     font-size: 15px;
     line-height: 1.9;
     color: var(--text-2);
     white-space: pre-wrap;
-    position: relative;
     transition: all var(--transition);
+  }
+
+  .step-body > div > .prompt-block:first-child {
+    margin-top: 0;
   }
 
   .prompt-block .prompt-label {
@@ -475,10 +478,8 @@
     font-weight: 600;
     letter-spacing: 0.2em;
     color: var(--text-ghost);
-    position: absolute;
-    top: -24px;
-    left: 0;
     text-transform: uppercase;
+    margin-bottom: 16px;
   }
 
   .prompt-block em {
